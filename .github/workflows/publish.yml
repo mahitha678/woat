@@ -30,10 +30,14 @@ jobs:
           
       - name: Create virtual environment
         run: |
-          python -m venv .venv
+          # Create a clean virtual environment without system packages
+          python -m venv .venv --clear --without-pip
           source .venv/bin/activate
-          python -m pip install --upgrade pip
-          pip install --upgrade setuptools wheel
+          # Install pip into the virtual environment
+          curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+          python get-pip.py --no-cache-dir
+          # Install basic build requirements
+          python -m pip install --no-cache-dir --upgrade pip setuptools wheel build twine
 
       - name: Prepare build environment
         run: |
@@ -52,15 +56,20 @@ jobs:
       - name: Build package
         run: |
           source .venv/bin/activate
-          # Install in editable mode first with --no-deps to avoid dependency conflicts
+          # Ignore system site packages
+          export PYTHONNOUSERSITE=1
+          # Install dependencies without installing conflicting packages
+          pip install --no-deps --ignore-installed typing-extensions
+          pip install --no-deps --ignore-installed pydantic
+          # Install other requirements while ignoring installed packages
+          pip install -r requirements.txt --no-deps --ignore-installed
+          # Install the package itself
           pip install -e . --no-deps
-          # Install dependencies in the virtual environment
-          pip install -r requirements.txt --no-cache-dir
           # Then build the distribution
-          python -m build
+          python -m build --no-isolation
         env:
           PYTHONPATH: ${{ github.workspace }}
-          PIP_NO_BINARY: :all:
+          PIP_NO_BINARY: typing-extensions,pydantic
 
       - name: Check package
         run: |
