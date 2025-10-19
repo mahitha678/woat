@@ -88,16 +88,3 @@ setup(
         "ai", "chat", "messaging", "api"
     ],
 )
-    },
-    include_package_data=True,
-    package_data={
-        "watbot": ["*.js", "*.json"],
-    },
-    entry_points={
-        "console_scripts": [
-            "watbot=watbot.cli:main",
-        ],
-    },
-    keywords="whatsapp instagram automation bot ai chatbot messaging",
-    zip_safe=False,
-)
