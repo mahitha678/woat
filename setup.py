@@ -15,9 +15,13 @@ def read_requirements(filename: str) -> List[str]:
         ]
 
 def read_file(filename: str) -> str:
-    """Read file contents"""
-    with open(filename, 'r', encoding='utf-8') as f:
-        return f.read()
+    """Read file contents, return empty string if file not found"""
+    try:
+        with open(filename, 'r', encoding='utf-8') as f:
+            return f.read()
+    except FileNotFoundError:
+        print(f"Warning: {filename} not found, using empty string")
+        return ""
 
 # Core setup configuration
 setup(
