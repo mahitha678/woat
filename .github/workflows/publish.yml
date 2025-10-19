@@ -27,6 +27,13 @@ jobs:
           pip install build --no-deps
           pip install packaging
           pip install importlib_metadata
+          
+      - name: Create virtual environment
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          python -m pip install --upgrade pip
+          pip install --upgrade setuptools wheel
 
       - name: Prepare build environment
         run: |
@@ -44,12 +51,16 @@ jobs:
           
       - name: Build package
         run: |
-          # Install in editable mode first
-          python -m pip install -e .
+          source .venv/bin/activate
+          # Install in editable mode first with --no-deps to avoid dependency conflicts
+          pip install -e . --no-deps
+          # Install dependencies in the virtual environment
+          pip install -r requirements.txt --no-cache-dir
           # Then build the distribution
           python -m build
         env:
-          PYTHONPATH: /usr/lib/python3/dist-packages:${{ github.workspace }}
+          PYTHONPATH: ${{ github.workspace }}
+          PIP_NO_BINARY: :all:
 
       - name: Check package
         run: |
