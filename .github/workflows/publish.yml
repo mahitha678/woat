@@ -28,9 +28,25 @@ jobs:
           pip install packaging
           pip install importlib_metadata
 
+      - name: Prepare build environment
+        run: |
+          # Create README.md if it doesn't exist
+          if [ ! -f README.md ] && [ -f readme.md ]; then
+            cp readme.md README.md
+          elif [ ! -f README.md ]; then
+            echo "# WATBOT - WhatsApp & Instagram Automation Bot" > README.md
+            echo "" >> README.md
+            echo "WhatsApp & Instagram Automation Bot with AI-powered responses." >> README.md
+          fi
+          
+          # List files to debug
+          ls -la
+          
       - name: Build package
         run: |
+          # Install in editable mode first
           python -m pip install -e .
+          # Then build the distribution
           python -m build
         env:
           PYTHONPATH: /usr/lib/python3/dist-packages:${{ github.workspace }}

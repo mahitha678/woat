@@ -15,13 +15,24 @@ def read_requirements(filename: str) -> List[str]:
         ]
 
 def read_file(filename: str) -> str:
-    """Read file contents, return empty string if file not found"""
+    """Read file contents, try both cases if not found"""
     try:
+        # Try exact filename first
         with open(filename, 'r', encoding='utf-8') as f:
             return f.read()
     except FileNotFoundError:
-        print(f"Warning: {filename} not found, using empty string")
-        return ""
+        # Try lowercase
+        try:
+            with open(filename.lower(), 'r', encoding='utf-8') as f:
+                return f.read()
+        except FileNotFoundError:
+            # Try uppercase
+            try:
+                with open(filename.upper(), 'r', encoding='utf-8') as f:
+                    return f.read()
+            except FileNotFoundError:
+                print(f"Warning: Could not find {filename} in any case variation, using empty string")
+                return ""
 
 # Core setup configuration
 setup(
