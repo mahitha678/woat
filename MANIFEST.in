@@ -1,0 +1,13 @@
+include README.md
+include LICENSE
+include requirements.txt
+include package.json
+include smart_whatsapp_bot.js
+include gemini_bot.py
+include insta_bot.py
+recursive-include examples *.py *.json
+recursive-include watbot *.py
+exclude .gitignore
+global-exclude __pycache__
+global-exclude *.py[co]
+global-exclude .DS_Store
