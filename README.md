@@ -1,6 +1,6 @@
 # WATBOT - WhatsApp & Instagram Automation Bot
 
-## Quick Links
+## Quick Linksgghjkl
 
 - 📚 **Documentation**: [README.md](README.md)
 - 🚀 **Quick Start**: [QUICKSTART.md](QUICKSTART.md)
